@@ -1,23 +1,16 @@
 package pl.michal.controller;
 
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import jdk.nashorn.internal.ir.debug.JSONWriter;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.michal.converter.ConverterCSV;
-import pl.michal.entity.TradeEntity;
 import pl.michal.model.TradeModel;
 import pl.michal.repository.TradeRepository;
-import pl.michal.util.TradeListUtils;
 
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin
@@ -30,7 +23,7 @@ public class TradeController {
     private TradeRepository tradeRepository;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String fileUpload(@RequestParam("file")MultipartFile file){
+    public String fileUpload(@RequestParam("file") MultipartFile file) {
         String name = file.getOriginalFilename();
 
         try {
@@ -40,10 +33,9 @@ public class TradeController {
             stream.close();
 
             List<TradeModel> tradeModelList = ConverterCSV.parseCSVToTradeModelList(path + name);
-            List<TradeEntity> tradeList = TradeListUtils.ConnectTrades(tradeModelList);
 
-            FileWriter fileWriter = new FileWriter(path + "\\JSONTradesRepo\\" + name);
-            fileWriter.write(JSONArray.toJSONString(tradeList));
+            List<TradeModel> tradeList = tradeModelList.stream().map(t -> (TradeModel) t).collect(Collectors.toList());
+
 
             tradeRepository.save((Iterable) tradeList);
             return "Success";
@@ -52,22 +44,22 @@ public class TradeController {
         }
 
     }
-
-    @RequestMapping("/showByDate")
-    public List<TradeEntity> showTradesByDate(@RequestParam(name = "startDate")String from,
-                                             @RequestParam(name = "endDate") String to) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date startDate = new Date();
-        startDate = sdf.parse(from);
-        Date endDate = new Date();
-        endDate = sdf.parse(to);
-        List<TradeEntity> tradeEntities = tradeRepository.findAllByDateBetween(startDate,endDate);
-        return tradeEntities;
-    }
-    @RequestMapping("/symbol")
-    public List<TradeEntity> showBySymbol(@RequestParam(name = "symbol") String symbol){
-        return tradeRepository.findAllBySymbol(symbol);
-    }
+//
+//    @RequestMapping("/showByDate")
+//    public List<Trade> showTradesByDate(@RequestParam(name = "startDate")String from,
+//                                        @RequestParam(name = "endDate") String to) throws ParseException {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+//        Date startDate = new Date();
+//        startDate = sdf.parse(from);
+//        Date endDate = new Date();
+//        endDate = sdf.parse(to);
+//        List<Trade> tradeEntities = tradeRepository.findAllByDateBetween(startDate,endDate);
+//        return tradeEntities;
+//    }
+//    @RequestMapping("/symbol")
+//    public List<Trade> showBySymbol(@RequestParam(name = "symbol") String symbol){
+//        return tradeRepository.findAllBySymbol(symbol);
+//    }
 
 
 }

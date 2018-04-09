@@ -1,15 +1,12 @@
-package pl.michal.entity;
+package pl.michal.trade;
 
 import lombok.Data;
-import lombok.Getter;
 
-import javax.persistence.*;
 import java.util.Date;
 
 
-
 @Data
-public class TradeEntity {
+public class Trade {
 
     private String symbol;
     private String side;

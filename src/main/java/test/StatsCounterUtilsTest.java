@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.michal.converter.ConverterCSV;
 import pl.michal.converter.StatsCounter;
-import pl.michal.entity.TradeEntity;
+import pl.michal.trade.Trade;
 import pl.michal.model.StatsModel;
 import pl.michal.model.TradeModel;
 import pl.michal.util.StatsCounterUtils;
@@ -23,7 +23,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class StatsCounterUtilsTest {
 
-    private static List<TradeEntity> tradeList;
+    private static List<Trade> tradeList;
     private static StatsCounterUtils statistics;
 
     @Before
@@ -135,18 +135,10 @@ public class StatsCounterUtilsTest {
         Assert.assertTrue(truncateDouble(statistics.countTotalGains()) == 3.8);
     }
 
-    @Test
-    public void shouldReturnStatsModelWithProperDataParallel() {
 
-        StatsModel statistic = StatsCounter.createStatisticModelFromTradeDataInParallel(tradeList);
-
-    }
     @Test
     public void shouldReturnStatsModelWithProperData() {
-
         StatsModel statistic = StatsCounter.createStatisticModelFromTradeData(tradeList);
-
-
     }
 
     private double truncateDouble(double d) {

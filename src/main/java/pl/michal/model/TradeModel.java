@@ -6,17 +6,16 @@ import com.univocity.parsers.annotations.Parsed;
 import com.univocity.parsers.conversions.DateConversion;
 import com.univocity.parsers.conversions.DoubleConversion;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "Trade")
+
+
 @Data
+@Entity
+@Table(name = "TradeModel")
 public class TradeModel {
 
     @Id

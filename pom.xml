@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.14.RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -24,26 +29,25 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <!-- hot swapping, disable cache for template, enable live reload -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
+
+        <!--MySQL database connection -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
@@ -54,18 +58,15 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.3.14.RELEASE</version>
-        </dependency>
+        <!--CSV parsing library-->
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
             <version>2.6.0</version>
             <type>jar</type>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok-maven -->
+
+        <!--library to for easier creation of common entities-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -73,22 +74,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>1.5.2.RELEASE</version>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>5.0.1.Final</version>
         </dependency>
-        <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
-            <artifactId>rxjava</artifactId>
-            <version>2.0.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
     </dependencies>
 
     <properties>

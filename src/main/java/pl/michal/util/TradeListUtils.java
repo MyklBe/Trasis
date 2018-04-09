@@ -1,7 +1,7 @@
 package pl.michal.util;
 
 
-import pl.michal.entity.TradeEntity;
+import pl.michal.trade.Trade;
 import pl.michal.model.TradeModel;
 
 import java.util.Comparator;
@@ -10,9 +10,9 @@ import java.util.List;
 
 public class TradeListUtils {
 
-    public static List<TradeEntity> ConnectTrades(List<TradeModel> tradeList){
+    public static List<Trade> ConnectTrades(List<TradeModel> tradeList){
         sortTradesBySymbolDateTime(tradeList);
-        List<TradeEntity> entityList = new LinkedList<>();
+        List<Trade> entityList = new LinkedList<>();
         int share = 0;
         LinkedList<TradeModel> tempList = new LinkedList<>();
         for(int i = 0; i < tradeList.size(); i++) {
@@ -32,8 +32,8 @@ public class TradeListUtils {
         return entityList;
     }
 
-    public static TradeEntity createNewTrade(LinkedList<TradeModel> tempList){
-        TradeEntity trade = new TradeEntity();
+    public static Trade createNewTrade(LinkedList<TradeModel> tempList){
+        Trade trade = new Trade();
         trade.setSymbol(tempList.getFirst().getSymbol());
         trade.setPriceEntry(tempList.getFirst().getPrice());
         trade.setPriceOut(tempList.getLast().getPrice());

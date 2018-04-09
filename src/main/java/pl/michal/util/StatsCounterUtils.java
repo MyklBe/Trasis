@@ -1,33 +1,28 @@
 package pl.michal.util;
 
 
-import pl.michal.entity.TradeEntity;
+import pl.michal.trade.Trade;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class StatsCounterUtils {
 
-    private final List<TradeEntity> trades = new LinkedList<>();
+    private final List<Trade> trades = new LinkedList<>();
 
-    public StatsCounterUtils(List<TradeEntity> tradeEntityList) {
-        trades.addAll(tradeEntityList);
+    public StatsCounterUtils(List<Trade> tradeList) {
+        trades.addAll(tradeList);
     }
 
     public double countAvgDayNet() {
-        long countDays = trades.stream().map(TradeEntity::getDate).distinct().count();
+        long countDays = trades.stream().map(Trade::getDate).distinct().count();
         double sumOfNet = trades.stream().map(t -> t.getGross()).mapToDouble(net -> net.doubleValue()).sum();
         double avgDayNet = sumOfNet / countDays;
         return avgDayNet;
     }
 
     public double countAvgDayVol() {
-        long countDays = trades.stream().map(TradeEntity::getDate).distinct().count();
+        long countDays = trades.stream().map(Trade::getDate).distinct().count();
         long sumOfVolume = trades.stream().map(t -> t.getShares()).mapToLong(shares -> shares.longValue()).sum();
         return sumOfVolume / countDays;
     }
@@ -109,10 +104,10 @@ public class StatsCounterUtils {
 
 
     public int countConsecutiveLosses() {
-        trades.sort(Comparator.comparing(TradeEntity::getDate).thenComparing(Comparator.comparing(TradeEntity::getTimeOut)));
+        trades.sort(Comparator.comparing(Trade::getDate).thenComparing(Comparator.comparing(Trade::getTimeOut)));
         int consLoss = 0;
         int counter = 0;
-        for (TradeEntity trade : trades) {
+        for (Trade trade : trades) {
             if (trade.getGross() <= 0) {
                 counter++;
                 if (counter > consLoss) {
@@ -126,10 +121,10 @@ public class StatsCounterUtils {
     }
 
     public int countConsecutiveGains() {
-        trades.sort(Comparator.comparing(TradeEntity::getDate).thenComparing(Comparator.comparing(TradeEntity::getTimeOut)));
+        trades.sort(Comparator.comparing(Trade::getDate).thenComparing(Comparator.comparing(Trade::getTimeOut)));
         int consGain = 0;
         int counter = 0;
-        for (TradeEntity trade : trades) {
+        for (Trade trade : trades) {
             if (trade.getGross() > 0) {
                 counter++;
                 if (counter > consGain) {
