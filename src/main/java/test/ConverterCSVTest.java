@@ -5,10 +5,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.michal.converter.ConverterCSV;
+import org.springframework.web.multipart.MultipartFile;
+import pl.michal.util.ConverterCSV;
 import pl.michal.model.TradeModel;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,16 +20,17 @@ import java.util.*;
 @RunWith(SpringRunner.class)
 public class ConverterCSVTest {
 
-    private File file;
+    private MultipartFile file;
     private List<TradeModel> tradeModelList;
 
     @Before
     public void setUp(){
         ClassLoader classLoader = new ConverterCSVTest().getClass().getClassLoader();
-        this.file = new File(classLoader.getResource("TradeList.csv").getFile());
+        File simpleFile = new File(classLoader.getResource("TradeList.csv").getFile());
         try {
-            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file.toString());
-        } catch (FileNotFoundException e) {
+            this.file = new MockMultipartFile("TradeList.csv", Files.readAllBytes(simpleFile.toPath()));
+            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -35,7 +39,7 @@ public class ConverterCSVTest {
     public void checkIfAllLinesConvertToTradeModelList() throws IOException {
         Assert.assertNotNull(tradeModelList);
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
         long countLines = br.lines().count() - 1;
         long count = tradeModelList.size();
         log.info("Number of lines in CSV: " + String.valueOf(count));

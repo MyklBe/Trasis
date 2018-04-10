@@ -5,28 +5,31 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.michal.converter.ConverterCSV;
+import org.springframework.web.multipart.MultipartFile;
+import pl.michal.util.ConverterCSV;
 import pl.michal.model.TradeModel;
 import pl.michal.util.TradeListUtils;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.util.*;
 
 
 @RunWith(SpringRunner.class)
 public class TradeUtilsTest {
 
-    private File file;
+    private MultipartFile file;
     private List<TradeModel> tradeModelList;
 
     @Before
     public void setUp() {
         ClassLoader classLoader = new ConverterCSVTest().getClass().getClassLoader();
-        this.file = new File(classLoader.getResource("TradeList.csv").getFile());
+        File simpleFile = new File(classLoader.getResource("TradeList.csv").getFile());
         try {
-            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file.toString());
-        } catch (FileNotFoundException e) {
+            this.file = new MockMultipartFile("TradeList.csv", Files.readAllBytes(simpleFile.toPath()));
+            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file);
+        } catch (java.io.IOException e) {
             e.printStackTrace();
         }
     }

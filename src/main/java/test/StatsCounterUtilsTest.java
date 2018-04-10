@@ -4,9 +4,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.michal.converter.ConverterCSV;
-import pl.michal.converter.StatsCounter;
+import org.springframework.web.multipart.MultipartFile;
+import pl.michal.util.ConverterCSV;
+import pl.michal.counter.StatsCounter;
 import pl.michal.trade.Trade;
 import pl.michal.model.StatsModel;
 import pl.michal.model.TradeModel;
@@ -14,9 +16,9 @@ import pl.michal.util.StatsCounterUtils;
 import pl.michal.util.TradeListUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,11 +31,12 @@ public class StatsCounterUtilsTest {
     @Before
     public void setUp() {
         ClassLoader classLoader = new ConverterCSVTest().getClass().getClassLoader();
-        File file = new File(classLoader.getResource("TradeListShort.csv").getFile());
+        File simpleFile = new File(classLoader.getResource("TradeListShort.csv").getFile());
         List<TradeModel> tradeModelList = new LinkedList<>();
         try {
-            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file.toString());
-        } catch (FileNotFoundException e) {
+            MultipartFile file = new MockMultipartFile("TradeListShort.csv", Files.readAllBytes(simpleFile.toPath()));
+            tradeModelList = ConverterCSV.parseCSVToTradeModelList(file);
+        } catch (java.io.IOException e) {
             e.printStackTrace();
         }
         tradeList = TradeListUtils.ConnectTrades(tradeModelList);
@@ -135,7 +138,7 @@ public class StatsCounterUtilsTest {
         Assert.assertTrue(truncateDouble(statistics.countTotalGains()) == 3.8);
     }
 
-
+    //test nie jest skonczony
     @Test
     public void shouldReturnStatsModelWithProperData() {
         StatsModel statistic = StatsCounter.createStatisticModelFromTradeData(tradeList);

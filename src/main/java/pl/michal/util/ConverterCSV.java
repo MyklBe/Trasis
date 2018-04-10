@@ -1,17 +1,16 @@
-package pl.michal.converter;
+package pl.michal.util;
 
 
 import com.univocity.parsers.common.processor.BeanListProcessor;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
+import org.apache.commons.io.FileUtils;
+import org.springframework.web.multipart.MultipartFile;
 import pl.michal.model.TradeModel;
 
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.NumberFormat;
 import java.util.*;
 import java.text.ParseException;
@@ -23,7 +22,7 @@ import java.util.stream.Stream;
 
 public class ConverterCSV {
 
-    public static List<TradeModel> parseCSVToTradeModelList(String filename) throws FileNotFoundException {
+    public static List<TradeModel> parseCSVToTradeModelList(MultipartFile file) throws IOException {
         BeanListProcessor<TradeModel> rowProcessor = new BeanListProcessor<>(TradeModel.class);
         CsvParserSettings parSet = new CsvParserSettings();
 
@@ -32,7 +31,8 @@ public class ConverterCSV {
         parSet.setDelimiterDetectionEnabled(true, ';');
 
         CsvParser parser = new CsvParser(parSet);
-        parser.parse(new BufferedReader(new FileReader(filename)));
+
+        parser.parse(file.getInputStream());
 
         List<TradeModel> tradeList = rowProcessor.getBeans();
         parser.stopParsing();

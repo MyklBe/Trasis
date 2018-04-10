@@ -1,4 +1,4 @@
-package pl.michal.converter;
+package pl.michal.counter;
 
 
 import pl.michal.trade.Trade;
